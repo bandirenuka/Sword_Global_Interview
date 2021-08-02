@@ -1,9 +1,11 @@
 from fastapi import FastAPI,Depends,status,Response,HTTPException
 from pydantic import BaseModel
-from models import model,schemas,database
+from models import model,schemas,database,hashing
 from models.database import engine
 from sqlalchemy.orm import Session
 from models.database import get_db
+from passlib.context import CryptContext
+from models.hashing import Hash
 
 
 
@@ -14,19 +16,24 @@ model.Base.metadata.create_all(bind=engine)
 
 
 
-@app.post('/user',status_code=status.HTTP_201_CREATED)
-def create_user(request:schemas.User,db:Session=Depends(get_db)):
-      new_user=model.Usert(username=request.name,email_id=request.email,password=request.password,address=request.address,phoneno=request.telephone_number)
-      db.add(new_user)
-      db.commit()
-      db.refresh(new_user)
-      return new_user
+
 
 
 @app.get("/users")
 def all_users(db:Session=Depends(get_db)):
       users=db.query(model.Usert).all()
       return users
+
+pwd_cxt=CryptContext(schemes=["bcrypt"],deprecated="auto")
+
+@app.post('/user',status_code=status.HTTP_201_CREATED)
+def create_user(request:schemas.User,db:Session=Depends(get_db)):
+      hashedPassword=pwd_cxt.hash(request.password)
+      new_user=model.Usert(username=request.name,email_id=request.email,password=Hash.bcrypt(request.password),address=request.address,phoneno=request.telephone_number)
+      db.add(new_user)
+      db.commit()
+      db.refresh(new_user)
+      return new_user
 
 
 @app.put('/user/{id}',status_code=status.HTTP_202_ACCEPTED)
