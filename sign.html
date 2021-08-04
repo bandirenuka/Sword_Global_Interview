@@ -270,6 +270,31 @@
         }
 
         ReactDOM.render(<SignIn />,document.querySelector(".row"));
+
+        handleSubmit = event => {
+    event.preventDefault();
+
+    // const user = {
+    //   name: this.state.name
+    // };
+    // const history = useHistory();
+
+    axios.post('http://127.0.0.1:8000/users', { email: this.state.email, 
+           password: this.state.password })
+      .then(res => {
+        // console.log(res);
+        console.log(res.data);
+        if(res.data===true)
+        {
+          // this.props.history.push("/Template");
+          this.setState({ redirect: true });
+          // console.log("hii")
+          // <Redirect to="/" />
+        }
+      })
+  }
+
+  }
         </script>    
     </body>
 </html>
