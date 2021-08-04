@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!--React JS-->
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+        <title>
+            Register
+        </title>
+
+         <!--Boostrap CDN 4.6-->
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"/>
+         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+         <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet"/>
+         <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css" rel="stylesheet"/>
+         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row mt-3">
+            </div>
+        </div>
+        <script type="text/babel">
+
+        class Welcome extends React.Component{
+            render(){
+                return (
+                    <div>
+                    <h1> {this.props.process} Success Full Welcome {this.props.user}</h1>
+                    </div>
+                )
+            }
+        }
+
+        class Main extends React.Component{
+            render(){
+                if(this.props.page === "SignIn")
+                {
+                    return (
+                        <SignIn />
+                    ); 
+                }
+                else
+                {
+                    return (
+                        <SignUp />
+                    ); 
+                }
+                  
+            }
+        }
+
+
+        class SignIn extends React.Component {
+
+            constructor(props){
+                super(props);
+                this.state = {
+                    user: "",
+                    password: "",
+                    login: false,
+                    SignUp: false
+                }
+                
+            }
+
+            render(){
+                if(this.state.SignUp)
+                {
+                    return this.goToSignUp();
+                }
+                else if(!this.state.login)
+                {
+                   return this.renderHTML();    
+                }
+                else
+                {
+                    return this.goToWelcome();
+                }
+
+            }
+
+            renderHTML(){
+                return(
+                    <div>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <button class="nav-link" onClick={this.SignUp}>Sign Up</button>
+                        </li>
+                    </ul>
+                    <form class="mt-5 col-6 card border border-primary">
+                        <div  class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Name</label>
+                            <input type="text" onInput={this.user} value={this.state.user} class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"/>
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" onInput={this.password} value={this.state.password} id="exampleInputPassword1"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onClick={this.submit}>Submit</button>
+                        </div>
+                    </form>    
+                    </div>
+                );
+            }
+
+            user = (event)=>{
+                    this.setState(({
+                        user: event.target.value
+                    }))
+                }
+
+            password = (event)=>{
+                    this.setState(({
+                        password: event.target.value,
+                    }))
+                }
+
+            submit = () =>{
+                   this.setState(({
+                       login: true
+                   }))
+                }
+
+            SignUp = () =>{
+                this.setState(({
+                    SignUp: true
+                }))
+            }
+
+            goToWelcome(){
+                var page = "Login";
+                return (
+                        <Welcome
+                         user={this.state.user}
+                          process={page}
+                           />
+                );
+            }
+
+            goToSignUp(){ 
+            return (
+                    <Main page={"SignUp"} />
+                );
+                this.setState(({
+                    SignUp: false
+                })) 
+            }
+
+        }
+
+        class SignUp extends React.Component{
+            constructor(props){
+                super(props);
+                this.state={
+                    SignUp:false,
+                    SignIn:false,
+                    user: "",
+                    password: "",
+                    DOB: "",
+                    mob: ""
+                }
+            }
+            render()
+            {
+               if(this.state.SignIn)
+               {
+                    return(
+                        <Main page="SignIn" />
+                    );
+               }
+               else if(!this.state.SignUp)
+               {
+                   return this.renderHTML()
+               }
+               else
+               {
+                    var page = "Registration";
+                    return (
+                            <Welcome
+                            user={this.state.user}
+                            process={page}
+                            />
+                    );
+               }
+            }
+
+            renderHTML(){
+                return(
+                    <div>
+                    <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <button class="nav-link" onClick={this.SignIn}>Sign In</button>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active">Sign Up</a>
+                        </li>
+                    </ul>
+                    <form class="mt-5 col-6 card border border-primary">
+                        <div  class="card-body">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">User Name</label>
+                            <input type="text" class="form-control" id="exampleInputEmail1" value={this.state.user} onInput={this.onChangeUser} aria-describedby="emailHelp"/>
+                            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Mobile Numer</label>
+                            <input type="number" class="form-control" id="exampleInputEmail1" value={this.state.mob} onInput={this.onChangemob} aria-describedby="emailHelp"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Address</label>
+                            <input type="number" class="form-control" id="exampleInputEmail1" value={this.state.mob} onInput={this.onChangemob} aria-describedby="emailHelp"/>
+                            
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Password</label>
+                            <input type="password" class="form-control" value={this.state.password} onInput={this.onChangePassword} id="exampleInputPassword1"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary" onClick={this.submit}>Submit</button>
+                        </div>
+                    </form>    
+                    </div>
+                );
+            }
+
+            onChangeDOB = (event)=>{
+                    this.setState(({
+                        DOB: event.target.value
+                    }))
+                }
+
+            onChangemob = (event) =>{
+                    this.setState(({
+                        mob: event.target.value
+                    }))
+                }
+
+            onChangeUser = (event) =>{
+                    this.setState(({
+                        user: event.target.value
+                    }))
+                }
+
+            onChangePassword = (event) =>{
+                    this.setState(({
+                        password: event.target.value
+                    }))
+                }
+
+            SignIn = () =>{
+                this.setState(({
+                    SignIn: true
+                }))
+            }
+
+            submit = () =>{
+                   this.setState(({
+                       SignUp: true
+                   }))
+            }
+
+        }
+
+        ReactDOM.render(<SignIn />,document.querySelector(".row"));
+        </script>    
+    </body>
+</html>
